@@ -2,7 +2,7 @@
 
 A fully autonomous, multi-agent system powered by open-source local LLMs that delivers real-time business insights, strategic recommendations, and governance validation — all through a user-friendly Streamlit web interface.
 
-This project simulates an internal AI analyst team by chaining together specialized agents. It processes structured sales data (CSV), unstructured email summaries, and internal strategy guidelines to produce a polished, data-driven business report with visualizations. It is designed to run entirely on your local machine, ensuring data privacy and offline capability.
+This project simulates an internal AI analyst team by chaining together specialized agents. It processes structured sales data (CSV), unstructured email summaries, and internal strategy guidelines to produce a polished, data-driven business report with visualizations. It is designed to run entirely on your local machine, ensuring data privacy and offline capability. Also features a user-friendly Streamlit web application with a tabbed interface for both guided analysis and ad-hoc questioning via a built-in chatbot.
 
 ---
 
@@ -64,6 +64,7 @@ multi-agent-genai-analyst/
 │   └── (generated_charts.png)
 ├── app.py              # Streamlit Web Interface
 ├── llm.py              # Central LLM interaction logic
+├── chatbot.py          #in-built Chatbot
 └── requirements.txt
 ```
 
