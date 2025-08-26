@@ -64,7 +64,7 @@ venv.bak/
 # Data and Temp Files - You might want to track data, but often not.
 # If your CSV is large, don't track it.
 # data/Superstore.csv
-output/
+
 temp_data/
 *.log
 
