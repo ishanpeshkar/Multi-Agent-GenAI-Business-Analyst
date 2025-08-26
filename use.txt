@@ -1,0 +1,15 @@
+Run in split terminals.
+Activate the virtual environments in both.
+
+Start the ollama model tinyllm in one terminal and the streamlit app in another 
+
+use the following commands
+
+
+Terminal 1:
+1. .\venv\Scripts\activate
+2. ollama run tinyllama
+
+Terminal 2:
+1. .\venv\Scripts\activate
+2. streamlit run app.py
