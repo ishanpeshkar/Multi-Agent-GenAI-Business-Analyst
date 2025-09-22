@@ -162,6 +162,32 @@ Your web browser will automatically open a new tab with the application interfac
 
 ---
 
+// ...existing code...
+
+## 📸 Sample Images Of the Project
+
+### Streamlit Web Interface
+![Streamlit App Interface](./images/Dashboard.jpg)
+
+### Strategy Agent Report
+![Strategy Agent](./images/StrategyAgent.jpg)
+
+### Data Visualizations
+![Sales by Region Chart](./images/VisualizationOutput.jpg)
+
+### Data Profiling
+![Monthly Sales Trend](./images/DataProfileOutput.jpg)
+
+### Agent Output
+![Agent Pipeline](./images/AgentOutput.jpg)
+
+### Chatbot Interface
+![Chatbot](./images/Chatbot.jpg)
+
+---
+
+
+
 ## 🧠 Switching to a More Powerful Model
 
 To improve the quality of the generated insights, you can switch to a more powerful model like `mistral` or `gemma:2b`.

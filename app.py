@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import os
 from Agents import data_analyst, insights_agent, strategy_agent, governance_agent, report_agent
+from streamlit_pandas_profiling import st_profile_report
+import chatbot  # Import the chatbot module
 
 st.set_page_config(layout="wide")
 
@@ -30,7 +32,7 @@ if st.sidebar.button("Generate Business Report"):
 
             emails_dir = 'temp_data/emails'
             for email in email_files:
-                 with open(os.path.join(emails_dir, email.name), "wb") as f:
+                with open(os.path.join(emails_dir, email.name), "wb") as f:
                     f.write(email.getbuffer())
 
             guidelines_path = os.path.join('temp_data', guidelines_file.name)
@@ -39,11 +41,14 @@ if st.sidebar.button("Generate Business Report"):
                 
             # --- Agent Pipeline ---
             st.info("Step 1: Data Analyst Agent is running...")
-            df, summary = data_analyst.analyze_data(sales_path, emails_dir)
+            df, summary, monthly_sales_df, profile = data_analyst.analyze_data(sales_path, emails_dir)
             
             if df is None:
-                st.error(summary) # Display error if CSV not found or invalid
+                st.error(summary)  # Display error if CSV not found or invalid
             else:
+                # Initialize the chatbot and store the chain in the session state
+                st.session_state.conversation_chain = chatbot.initialize_chatbot(sales_path, emails_dir, guidelines_path)
+
                 st.info("Step 2: Insights Agent is running...")
                 insights = insights_agent.generate_insights(summary)
                 
@@ -55,15 +60,44 @@ if st.sidebar.button("Generate Business Report"):
                 
                 st.info("Step 5: Report Agent is running...")
                 output_dir = 'output'
-                report_path, image_paths = report_agent.generate_report(df, insights, recommendations, governance_check, output_dir)
+                report_path, image_paths = report_agent.generate_report(
+                    df, insights, recommendations, governance_check, monthly_sales_df, output_dir
+                )
                 
                 st.success("Report generated successfully!")
 
                 # --- 3. Display Results ---
-                with open(report_path, 'r') as f:
-                    st.markdown(f.read(), unsafe_allow_html=True)
+                tab1, tab2, tab3 = st.tabs(["📊 Business Report", "📈 Data Profile", "🖼️ Visualizations"])
+
+                with tab1:
+                    with open(report_path, 'r') as f:
+                        st.markdown(f.read(), unsafe_allow_html=True)
+
+                with tab2:
+                    st.header("Automated Data Profile")
+                    st_profile_report(profile)
+
+                with tab3:
+                    st.header("Visual Charts")
+                    for image_path in image_paths:
+                        st.image(image_path)
+
+                    # Placeholder for new time-series chart
+                    st.header("Time Series Chart Placeholder")
+                    # Example: Create a time-series chart using monthly_df if it exists
+                    if 'monthly_df' in locals():
+                        st.line_chart(monthly_df)
+
     else:
         st.sidebar.warning("Please upload all required files.")
 
+# --- Chatbot Section ---
+if st.sidebar.button("Go to Chatbot"):
+    st.session_state.page = "chatbot"
+if st.sidebar.button("Go to Report"):
+    st.session_state.page = "report"
+
+if st.session_state.get("page", "report") == "chatbot":
+    chatbot.display_chat_interface()  # Show the chatbot interface
 else:
     st.info("Please upload your sales data, email summaries, and company guidelines, then click 'Generate Business Report'.")
